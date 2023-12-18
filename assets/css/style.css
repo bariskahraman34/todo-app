@@ -59,8 +59,46 @@ nav{
     margin-top: 2rem;
 }
 
+#tasks-list{
+    list-style-type: none;
+    padding: 1rem;
+}
 
+.task{
+    display: flex;
+    justify-content: space-between;
+}
 
+.left-side{
+    margin-left: 20px;
+}
+
+.left-side > span{
+    font-size: 1.3rem;
+    margin-left: 30px;
+}
+
+.right-side > .edit{
+    margin-right: 20px;
+    background-color: transparent;
+    border: none;
+    color: green;
+    cursor: pointer;
+}
+
+.right-side > .delete{
+    background-color: transparent;
+    border: none;
+    color: red;
+    cursor: pointer;
+}
+
+#tasks-list > li{
+    border: 1px solid black;
+    padding: 2rem;
+    border-radius: 1.6rem;
+    margin-top: 20px;
+}
 
 .copyright{
     text-align: center;
