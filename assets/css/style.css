@@ -100,6 +100,26 @@ nav{
     margin-top: 20px;
 }
 
+.btn-bottom{
+    margin: 20px 0px 20px 50px;
+}
+
+#delete-completed{
+    padding: 1rem;
+    background-color: #313942;
+    color: white;
+    letter-spacing: 1px;
+    border-radius: .6rem;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color .3s ease-in-out;
+}
+
+#delete-completed:hover{
+    background-color: #8895a3;
+}
+
 .copyright{
     text-align: center;
     margin-top: 50px;
