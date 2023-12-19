@@ -39,21 +39,24 @@ addBtn.addEventListener('click',function(){
 });
 
 function bindEditBtns(){
-    counter = 0;
     const editBtns = document.querySelectorAll('.edit');
-    for (const editBtn of editBtns) {
-        editBtn.addEventListener('click',function(){
-            const answer = prompt(`"${editBtn.parentElement.previousElementSibling.children[1].innerHTML}" içeriğinizi ne ile değiştirmek istersiniz ?`)
+    for (let i = 0 ; i < editBtns.length ; i++) {
+        editBtns[i].addEventListener('click',function(){
+            const answer = prompt(`"${editBtns[i].parentElement.previousElementSibling.children[1].innerHTML}" içeriğinizi ne ile değiştirmek istersiniz ?`)
             if(answer == ""){
                 alert("Bu içerik boş bırakılamaz");
             }else if(answer == null){
 
             }else{
-                editBtn.parentElement.previousElementSibling.children[1].innerHTML = answer;
+                editBtns[i].parentElement.previousElementSibling.children[1].innerHTML = answer;
+                saveTaskEntries[i].task = answer;
+                saveTaskToLocalStorage();
             }
         })
     }
 }
+
+
 
 function bindDeleteBtns(){
     const deleteBtns = document.querySelectorAll('.delete');
@@ -61,12 +64,8 @@ function bindDeleteBtns(){
         deleteBtns[i].addEventListener('click',function(){
             const answer = confirm('Bu içeriği silmek istediğinize emin misiniz?');
             if(answer){
-                counter = 0;
                 this.parentElement.parentElement.remove();
                 saveTaskEntries.splice(Number(this.parentElement.parentElement.id),1)
-                localStorage.clear();
-                saveTaskToLocalStorage();
-
                 getTasks();
             }
         })
@@ -94,6 +93,7 @@ function getTasks(){
     }
     bindDeleteBtns();
     bindEditBtns();
+    saveTaskToLocalStorage();
 }
 
 getTasks();
