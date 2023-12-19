@@ -72,6 +72,15 @@ function bindDeleteBtns(){
     }
 }
 
+function bindCompeletedInput(){
+    const completedInputs = document.querySelectorAll('.completed');
+    for (const completedInput of completedInputs) {
+        completedInput.addEventListener('click',function(){
+            
+        })
+    }
+}
+
 function getTasks(){
     counter = 0;
     tasksList.innerHTML = '';
