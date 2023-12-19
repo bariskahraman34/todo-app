@@ -19,7 +19,13 @@ newTask.addEventListener('input',function(e){
         addBtn.disabled = false;
     }
 });
-let counter = 0;
+let counter;
+
+if(saveTaskEntries.length == 0){
+    counter = 0;
+} else{
+    counter = saveTaskEntries.length;
+}
 
 addBtn.addEventListener('click',function(){
     let newTaskValue = newTask.value;
@@ -35,7 +41,7 @@ addBtn.addEventListener('click',function(){
 
     tasksList.innerHTML += 
     `
-    <li class="task">
+    <li class="task" id="${counter}">
         <div class="left-side">
             <input type="checkbox" class="completed">
             <span class="task-content">${newTaskValue}</span>
@@ -73,21 +79,22 @@ function bindDeleteBtns(){
         deleteBtn.addEventListener('click',function(){
             const answer = confirm('Bu içeriği silmek istediğinize emin misiniz?');
             if(answer){
-                deleteBtn.parentElement.parentElement.remove();
+                this.parentElement.parentElement.remove();
+                console.log(localStorage.getItem(this.parentElement.parentElement))
             }
         })
     }
 }
 
 function getTasks(){
-    tasksList.innerHTML += '';
-    for(const taskEntry of saveTaskEntries){
+    tasksList.innerHTML = '';
+    for(i = 0 ; i < saveTaskEntries.length ; i++){
         tasksList.innerHTML += 
         `
-        <li class="task">
+        <li class="task" id="${i + 1}">
             <div class="left-side">
                 <input type="checkbox" class="completed">
-                <span class="task-content">${taskEntry.task}</span>
+                <span class="task-content">${saveTaskEntries[i].task}</span>
             </div>
             <div class="right-side">
                 <button class="edit"><i class="fa-solid fa-pen-to-square fa-2x"></i></button>
