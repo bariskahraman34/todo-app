@@ -21,43 +21,25 @@ newTask.addEventListener('input',function(e){
 });
 let counter;
 
-if(saveTaskEntries.length == 0){
-    counter = 0;
-} else{
-    counter = saveTaskEntries.length;
-}
 
 addBtn.addEventListener('click',function(){
+    counter = saveTaskEntries.length;
     let newTaskValue = newTask.value;
     addBtn.disabled = true;
-    counter++;
     saveTaskEntries.push(
         {
+            id:counter,
             task: newTaskValue
         }
     );
 
     saveTaskToLocalStorage();
-
-    tasksList.innerHTML += 
-    `
-    <li class="task" id="${counter}">
-        <div class="left-side">
-            <input type="checkbox" class="completed">
-            <span class="task-content">${newTaskValue}</span>
-        </div>
-        <div class="right-side">
-            <button class="edit"><i class="fa-solid fa-pen-to-square fa-2x"></i></button>
-            <button class="delete"><i class="fa-solid fa-trash-can fa-2x"></i></button>
-        </div>
-    </li>
-    `
+    getTasks();
     newTask.value = "";
-    bindEditBtns();
-    bindDeleteBtns();
 });
 
 function bindEditBtns(){
+    counter = 0;
     const editBtns = document.querySelectorAll('.edit');
     for (const editBtn of editBtns) {
         editBtn.addEventListener('click',function(){
@@ -75,23 +57,29 @@ function bindEditBtns(){
 
 function bindDeleteBtns(){
     const deleteBtns = document.querySelectorAll('.delete');
-    for (const deleteBtn of deleteBtns) {
-        deleteBtn.addEventListener('click',function(){
+    for (let i = 0 ; i < deleteBtns.length ; i++) {
+        deleteBtns[i].addEventListener('click',function(){
             const answer = confirm('Bu içeriği silmek istediğinize emin misiniz?');
             if(answer){
+                counter = 0;
                 this.parentElement.parentElement.remove();
-                console.log(localStorage.getItem(this.parentElement.parentElement))
+                saveTaskEntries.splice(Number(this.parentElement.parentElement.id),1)
+                localStorage.clear();
+                saveTaskToLocalStorage();
+
+                getTasks();
             }
         })
     }
 }
 
 function getTasks(){
+    counter = 0;
     tasksList.innerHTML = '';
     for(i = 0 ; i < saveTaskEntries.length ; i++){
         tasksList.innerHTML += 
         `
-        <li class="task" id="${i + 1}">
+        <li class="task" id="${counter}">
             <div class="left-side">
                 <input type="checkbox" class="completed">
                 <span class="task-content">${saveTaskEntries[i].task}</span>
@@ -102,6 +90,7 @@ function getTasks(){
             </div>
         </li>
         `
+        counter ++;
     }
     bindDeleteBtns();
     bindEditBtns();
