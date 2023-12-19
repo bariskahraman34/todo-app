@@ -24,7 +24,7 @@ addBtn.addEventListener('click',function(){
     <li class="task">
         <div class="left-side">
             <input type="checkbox" class="completed">
-            <span class="task-content" id="task-${counter}">${newTaskValue}</span>
+            <span class="task-content">${newTaskValue}</span>
         </div>
         <div class="right-side">
             <button class="edit"><i class="fa-solid fa-pen-to-square fa-2x"></i></button>
@@ -34,17 +34,13 @@ addBtn.addEventListener('click',function(){
     `
     newTask.value = "";
     bindEditBtns();
-
+    bindDeleteBtns();
 });
 
 function bindEditBtns(){
-    const editBtns = document.querySelectorAll('.edit');
-    const taskContents = document.querySelector(`#task-${counter}`);
-    for(const editBtn of editBtns){
-        editBtn.addEventListener('click',function(){
-            const answer = prompt('İçeriği yeniden yazın.');
-            taskContents.innerHTML = answer;
-        })
-    }
+
 }
 
+function bindDeleteBtns(){
+
+}
