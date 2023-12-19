@@ -1,6 +1,20 @@
 const newTask = document.querySelector('#new-task');
 const addBtn = document.querySelector('#add-button');
-const tasksList = document.querySelector('#tasks-list')
+const tasksList = document.querySelector('#tasks-list');
+const deleteCompleted = document.querySelector('#delete-completed')
+
+addBtn.disabled = true;
+deleteCompleted.disabled = true;
+
+newTask.addEventListener('input',function(e){
+    if(e.target.value == ''){
+        addBtn.disabled = true;
+    }else{
+        addBtn.disabled = false;
+    }
+    console.log(newTask.value)
+
+})
 
 addBtn.addEventListener('click',function(){
     let newTaskValue = newTask.value;
@@ -18,4 +32,5 @@ addBtn.addEventListener('click',function(){
         </div>
     </li>
     `
+    newTask.value = "";
 })

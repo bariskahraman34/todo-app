@@ -127,3 +127,10 @@ nav{
     margin-top: 50px;
     margin-bottom: 30px;
 }
+
+/* Disabled */
+#add-button:disabled,
+#delete-completed:disabled{
+    background-color: grey;
+    cursor:default;
+}
