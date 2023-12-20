@@ -1,10 +1,10 @@
 const newTask = document.querySelector('#new-task');
 const addBtn = document.querySelector('#add-button');
 const tasksList = document.querySelector('#tasks-list');
-const deleteCompleted = document.querySelector('#delete-completed');
+const deleteCompletedBtn = document.querySelector('#delete-completed');
 
 addBtn.disabled = true;
-deleteCompleted.disabled = true;
+deleteCompletedBtn.disabled = true;
 
 function saveTaskToLocalStorage(){
     localStorage.setItem('taskEntries', JSON.stringify(saveTaskEntries));
@@ -72,13 +72,44 @@ function bindDeleteBtns(){
     }
 }
 
+let inputCompletedCounter = 0;
+
 function bindCompeletedInput(){
     const completedInputs = document.querySelectorAll('.completed');
     for (const completedInput of completedInputs) {
         completedInput.addEventListener('click',function(){
-            
+            if(completedInput.hasAttribute('checked','checked')){
+                completedInput.removeAttribute('checked','checked');
+                completedInput.nextElementSibling.style.textDecoration = "none";
+                inputCompletedCounter --;
+            }else{
+                completedInput.setAttribute('checked','checked');
+                completedInput.nextElementSibling.style.textDecoration = "line-through";
+                inputCompletedCounter ++;
+            }
+            deleteCompletedElements();
         })
     }
+}
+
+function deleteCompletedElements(){
+    if(inputCompletedCounter > 0){
+        deleteCompletedBtn.disabled = false;
+        deleteCompletedBtn.addEventListener('click',function(){
+            const completedInputs = document.querySelectorAll('.completed');
+            for (const completedInput of completedInputs) {
+                if(completedInput.hasAttribute('checked','checked')){
+                    completedInput.parentElement.parentElement.remove();
+                    saveTaskEntries.splice(completedInput.parentElement.parentElement.id,1);
+                    console.log(completedInput.parentElement.parentElement.id);
+                    getTasks();
+                }
+            }
+        })
+    }else{
+        deleteCompletedBtn.disabled = true;
+    }
+
 }
 
 function getTasks(){
@@ -102,6 +133,8 @@ function getTasks(){
     }
     bindDeleteBtns();
     bindEditBtns();
+    bindCompeletedInput();
+    deleteCompletedElements();
     saveTaskToLocalStorage();
 }
 
