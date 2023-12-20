@@ -87,9 +87,11 @@ function bindCompeletedInput(){
             if(completedInput.hasAttribute('checked','checked')){
                 completedInput.removeAttribute('checked','checked');
                 completedInput.nextElementSibling.style.textDecoration = "none";
+                completedInput.classList.remove("checked")
                 inputCompletedCounter --;
             }else{
                 completedInput.setAttribute('checked','checked');
+                completedInput.classList.add("checked")
                 completedInput.nextElementSibling.style.textDecoration = "line-through";
                 inputCompletedCounter ++;
             }
@@ -102,16 +104,14 @@ function deleteCompletedElements(){
     if(inputCompletedCounter > 0){
         deleteCompletedBtn.disabled = false;
         deleteCompletedBtn.addEventListener('click',function(){
-            const completedInputs = document.querySelectorAll('.completed');
-            for (const completedInput of completedInputs) {
-                if(completedInput.hasAttribute('checked','checked')){
-                    completedInput.parentElement.parentElement.remove();
-                    saveTaskEntries.splice(completedInput.parentElement.parentElement.id,1);
-                    console.log(completedInput.parentElement.parentElement.id);
-                    getTasks();
-                }
-            }
+        const completedInputsCheckeds = document.querySelectorAll('.checked');
+        for (const completedInputsChecked of completedInputsCheckeds) {
+            saveTaskEntries.splice(completedInputsChecked.parentElement.parentElement.id,1);
+            completedInputsChecked.parentElement.parentElement.remove();
+        }
+
             deleteCompletedBtn.disabled = true;
+            getTasks();
         })
     }else{
         deleteCompletedBtn.disabled = true;
