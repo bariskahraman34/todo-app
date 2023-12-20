@@ -106,12 +106,11 @@ function deleteCompletedElements(){
         deleteCompletedBtn.addEventListener('click',function(){
         const completedInputsCheckeds = document.querySelectorAll('.checked');
         for (const completedInputsChecked of completedInputsCheckeds) {
-            saveTaskEntries.splice(completedInputsChecked.parentElement.parentElement.id,1);
+            saveTaskEntries.splice(Number(completedInputsChecked.parentElement.parentElement.id),1);
             completedInputsChecked.parentElement.parentElement.remove();
-        }
-
-            deleteCompletedBtn.disabled = true;
             getTasks();
+        }
+            deleteCompletedBtn.disabled = true;
         })
     }else{
         deleteCompletedBtn.disabled = true;
