@@ -2,6 +2,12 @@ const newTask = document.querySelector('#new-task');
 const addBtn = document.querySelector('#add-button');
 const tasksList = document.querySelector('#tasks-list');
 const deleteCompletedBtn = document.querySelector('#delete-completed');
+const copyright = document.querySelector('.copyright');
+
+const date = new Date();
+const getFullYear = date.getFullYear();
+
+copyright.innerHTML = `<h3>Barış Kahraman Copyright © ${getFullYear} , Tüm Hakları Saklıdır.</h3>`
 
 addBtn.disabled = true;
 deleteCompletedBtn.disabled = true;
@@ -105,6 +111,7 @@ function deleteCompletedElements(){
                     getTasks();
                 }
             }
+            deleteCompletedBtn.disabled = true;
         })
     }else{
         deleteCompletedBtn.disabled = true;
