@@ -71,8 +71,8 @@ function bindDeleteBtns(){
         deleteBtns[i].addEventListener('click',function(){
             const answer = confirm('Bu içeriği silmek istediğinize emin misiniz?');
             if(answer){
-                this.parentElement.parentElement.remove();
-                saveTaskEntries.splice(Number(this.parentElement.parentElement.id),1)
+                saveTaskEntries.splice(i,1);
+                saveTaskToLocalStorage();
                 getTasks();
             }
         })
@@ -89,13 +89,13 @@ function bindCompeletedInput(){
                 completedInputs[i].removeAttribute('checked','checked');
                 completedInputs[i].nextElementSibling.style.textDecoration = "none";
                 completedInputs[i].classList.remove("checked")
-                saveTaskEntries[i] = {id: counter , task:saveTaskEntries[i].task, completed:false};
+                saveTaskEntries[i] = {id: saveTaskEntries[i].id , task:saveTaskEntries[i].task, completed:false};
                 saveTaskToLocalStorage();
                 inputCompletedCounter --;
             }else{
                 completedInputs[i].setAttribute('checked','checked');
                 completedInputs[i].classList.add("checked");
-                saveTaskEntries[i] = {id: counter , task:saveTaskEntries[i].task, completed:true};
+                saveTaskEntries[i] = {id: saveTaskEntries[i].id , task:saveTaskEntries[i].task, completed:true};
                 saveTaskToLocalStorage();
                 completedInputs[i].nextElementSibling.style.textDecoration = "line-through";
 
@@ -105,40 +105,23 @@ function bindCompeletedInput(){
         })
     }
 }
-
 function deleteCompletedElements(){
     if(inputCompletedCounter > 0){
         deleteCompletedBtn.disabled = false;
         deleteCompletedBtn.addEventListener('click',function(){
-            const completedInputsCheckeds = document.querySelectorAll('.checked');
-            for (let i = 0 ; i < completedInputsCheckeds.length ; i++ ) {
-                completedInputsCheckeds[i].parentElement.parentElement.remove();
+            const completedInputs = document.querySelectorAll('.checked');
+            for (const completedInput of completedInputs) {
+                saveTaskEntries.splice(Number(completedInput.parentElement.parentElement.id),1);
             }
+            saveTaskToLocalStorage();
+            getTasks();
             deleteCompletedBtn.disabled = true;
-            getRemainTasks();
         })
     }else{
         deleteCompletedBtn.disabled = true;
     }
 }
 
-function getRemainTasks(){
-    localStorage.clear();
-    const taskContents = document.querySelectorAll('.task-content');
-    counter = 0;
-    for (let i = 0 ; i < taskContents.length ; i++) {
-        saveTaskEntries.push(
-            {
-                id:counter,
-                task:taskContents[i].innerHTML,
-                completed:false
-            }
-        )
-        counter++;
-        saveTaskToLocalStorage();
-    }
-    getTasks();
-}
 function bindDeleteAllBtn(){
     if(saveTaskEntries.length > 0){
         deleteAllBtn.disabled = false;
@@ -153,10 +136,6 @@ function bindDeleteAllBtn(){
         deleteAllBtn.disabled = true;
     }
 }
-    
-
-
-
 
 function getTasks(){
     counter = 0;
