@@ -19,7 +19,7 @@ function saveTaskToLocalStorage(){
 }
 
 newTask.addEventListener('input',function(e){
-    if(e.target.value == ''){
+    if(e.target.value.trim() == ''){
         addBtn.disabled = true;
     }else{
         addBtn.disabled = false;
