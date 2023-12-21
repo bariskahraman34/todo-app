@@ -113,7 +113,7 @@ function deleteCompletedElements(){
             // saveTaskEntries.splice((JSON.parse(localStorage.getItem('taskEntries')))[completedInput].id,1)
             completedInputsChecked.parentElement.parentElement.remove();
         }
-            // getRemainTasks();
+            getRemainTasks();
             deleteCompletedBtn.disabled = true;
         })
     }else{
@@ -123,10 +123,10 @@ function deleteCompletedElements(){
 let remainTasks = [];
 function getRemainTasks(){
     localStorage.clear();
-    const tasks = document.querySelectorAll('.task');
+    const tasksContent = document.querySelectorAll('.task-content');
     
-    for (const task of tasks) {
-        remainTasks.push(task);
+    for (const taskContent of tasksContent) {
+        remainTasks.push(taskContent.innerHTML);
     }
 
     counter = 0;
@@ -145,11 +145,18 @@ function getRemainTasks(){
             </div>
         </li>
         `
+        saveTaskEntries.push(
+            {
+                id:counter,
+                task:remainTasks[i]
+            }
+        )
         counter ++;
-        console.log(remainTasks[i])
     }
-
+    getTasks();
 }
+
+
 
 function getTasks(){
     counter = 0;
