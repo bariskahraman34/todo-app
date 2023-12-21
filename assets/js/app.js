@@ -100,22 +100,25 @@ function bindCompeletedInput(){
     }
 }
 
+let completedInputsArray = [];
 function deleteCompletedElements(){
     if(inputCompletedCounter > 0){
         deleteCompletedBtn.disabled = false;
         deleteCompletedBtn.addEventListener('click',function(){
         const completedInputsCheckeds = document.querySelectorAll('.checked');
         for (const completedInputsChecked of completedInputsCheckeds) {
-            saveTaskEntries.splice(Number(completedInputsChecked.parentElement.parentElement.id),1);
+            let completedInput = completedInputsChecked.parentElement.parentElement.id
+            completedInputsArray.push(completedInput);
+            console.log((JSON.parse(localStorage.getItem('taskEntries')))[completedInput])
+            saveTaskEntries.splice((JSON.parse(localStorage.getItem('taskEntries')))[completedInput].id,1)
             completedInputsChecked.parentElement.parentElement.remove();
-            getTasks();
         }
+            getTasks();
             deleteCompletedBtn.disabled = true;
         })
     }else{
         deleteCompletedBtn.disabled = true;
     }
-
 }
 
 function getTasks(){
