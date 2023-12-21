@@ -100,25 +100,55 @@ function bindCompeletedInput(){
     }
 }
 
-let completedInputsArray = [];
+// let completedInputsArray = [];
 function deleteCompletedElements(){
     if(inputCompletedCounter > 0){
         deleteCompletedBtn.disabled = false;
         deleteCompletedBtn.addEventListener('click',function(){
         const completedInputsCheckeds = document.querySelectorAll('.checked');
         for (const completedInputsChecked of completedInputsCheckeds) {
-            let completedInput = completedInputsChecked.parentElement.parentElement.id
-            completedInputsArray.push(completedInput);
-            console.log((JSON.parse(localStorage.getItem('taskEntries')))[completedInput])
-            saveTaskEntries.splice((JSON.parse(localStorage.getItem('taskEntries')))[completedInput].id,1)
+            // let completedInput = completedInputsChecked.parentElement.parentElement.id
+            // completedInputsArray.push(completedInput);
+            // console.log((JSON.parse(localStorage.getItem('taskEntries')))[completedInput])
+            // saveTaskEntries.splice((JSON.parse(localStorage.getItem('taskEntries')))[completedInput].id,1)
             completedInputsChecked.parentElement.parentElement.remove();
         }
-            getTasks();
+            // getRemainTasks();
             deleteCompletedBtn.disabled = true;
         })
     }else{
         deleteCompletedBtn.disabled = true;
     }
+}
+let remainTasks = [];
+function getRemainTasks(){
+    localStorage.clear();
+    const tasks = document.querySelectorAll('.task');
+    
+    for (const task of tasks) {
+        remainTasks.push(task);
+    }
+
+    counter = 0;
+    tasksList.innerHTML = '';
+    for(i = 0 ; i < tasksList.childElementCount ; i++){
+        tasksList.innerHTML += 
+        `
+        <li class="task" id="${counter}">
+            <div class="left-side">
+                <input type="checkbox" class="completed">
+                <span class="task-content">${remainTasks[i]}</span>
+            </div>
+            <div class="right-side">
+                <button class="edit"><i class="fa-solid fa-pen-to-square fa-2x"></i></button>
+                <button class="delete"><i class="fa-solid fa-trash-can fa-2x"></i></button>
+            </div>
+        </li>
+        `
+        counter ++;
+        console.log(remainTasks[i])
+    }
+
 }
 
 function getTasks(){
