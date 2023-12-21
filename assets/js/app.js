@@ -2,6 +2,7 @@ const newTask = document.querySelector('#new-task');
 const addBtn = document.querySelector('#add-button');
 const tasksList = document.querySelector('#tasks-list');
 const deleteCompletedBtn = document.querySelector('#delete-completed');
+const deleteAllBtn = document.querySelector('#delete-all');
 const copyright = document.querySelector('.copyright');
 
 const date = new Date();
@@ -10,7 +11,6 @@ const getFullYear = date.getFullYear();
 copyright.innerHTML = `<h3>Barış Kahraman Copyright © ${getFullYear} , Tüm Hakları Saklıdır.</h3>`
 
 addBtn.disabled = true;
-deleteCompletedBtn.disabled = true;
 
 let saveTaskEntries = JSON.parse(localStorage.getItem('taskEntries')) || [];
 
@@ -35,7 +35,8 @@ addBtn.addEventListener('click',function(){
     saveTaskEntries.push(
         {
             id:counter,
-            task: newTaskValue
+            task: newTaskValue,
+            completed:false
         }
     );
 
@@ -82,17 +83,22 @@ let inputCompletedCounter = 0;
 
 function bindCompeletedInput(){
     const completedInputs = document.querySelectorAll('.completed');
-    for (const completedInput of completedInputs) {
-        completedInput.addEventListener('click',function(){
-            if(completedInput.hasAttribute('checked','checked')){
-                completedInput.removeAttribute('checked','checked');
-                completedInput.nextElementSibling.style.textDecoration = "none";
-                completedInput.classList.remove("checked")
+    for (let i = 0 ; i < completedInputs.length; i++) {
+        completedInputs[i].addEventListener('click',function(){
+            if(completedInputs[i].hasAttribute('checked','checked')){
+                completedInputs[i].removeAttribute('checked','checked');
+                completedInputs[i].nextElementSibling.style.textDecoration = "none";
+                completedInputs[i].classList.remove("checked")
+                saveTaskEntries[i] = {id: counter , task:saveTaskEntries[i].task, completed:false};
+                saveTaskToLocalStorage();
                 inputCompletedCounter --;
             }else{
-                completedInput.setAttribute('checked','checked');
-                completedInput.classList.add("checked")
-                completedInput.nextElementSibling.style.textDecoration = "line-through";
+                completedInputs[i].setAttribute('checked','checked');
+                completedInputs[i].classList.add("checked");
+                saveTaskEntries[i] = {id: counter , task:saveTaskEntries[i].task, completed:true};
+                saveTaskToLocalStorage();
+                completedInputs[i].nextElementSibling.style.textDecoration = "line-through";
+
                 inputCompletedCounter ++;
             }
             deleteCompletedElements();
@@ -100,19 +106,14 @@ function bindCompeletedInput(){
     }
 }
 
-// let completedInputsArray = [];
 function deleteCompletedElements(){
     if(inputCompletedCounter > 0){
         deleteCompletedBtn.disabled = false;
         deleteCompletedBtn.addEventListener('click',function(){
-        const completedInputsCheckeds = document.querySelectorAll('.checked');
-        for (const completedInputsChecked of completedInputsCheckeds) {
-            // let completedInput = completedInputsChecked.parentElement.parentElement.id
-            // completedInputsArray.push(completedInput);
-            // console.log((JSON.parse(localStorage.getItem('taskEntries')))[completedInput])
-            // saveTaskEntries.splice((JSON.parse(localStorage.getItem('taskEntries')))[completedInput].id,1)
-            completedInputsChecked.parentElement.parentElement.remove();
-        }
+            const completedInputsCheckeds = document.querySelectorAll('.checked');
+            for (let i = 0 ; i < completedInputsCheckeds.length ; i++ ) {
+                completedInputsCheckeds[i].parentElement.parentElement.remove();
+            }
             deleteCompletedBtn.disabled = true;
             getRemainTasks();
         })
@@ -120,70 +121,70 @@ function deleteCompletedElements(){
         deleteCompletedBtn.disabled = true;
     }
 }
-let remainTasks = [];
-function getRemainTasks(){
-    localStorage.removeItem("taskEntries");
-    const tasksContent = document.querySelectorAll('.task-content');
-    
-    for (const taskContent of tasksContent) {
-        remainTasks.push(taskContent.innerHTML);
-    }
 
+function getRemainTasks(){
+    localStorage.clear();
+    const taskContents = document.querySelectorAll('.task-content');
     counter = 0;
-    tasksList.innerHTML = '';
-    for(i = 0 ; i < tasksList.childElementCount ; i++){
-        tasksList.innerHTML += 
-        `
-        <li class="task" id="${counter}">
-            <div class="left-side">
-                <input type="checkbox" id="input-${counter}" class="completed">
-                <span class="task-content">${remainTasks[i]}</span>
-            </div>
-            <div class="right-side">
-                <button class="edit"><i class="fa-solid fa-pen-to-square fa-2x"></i></button>
-                <button class="delete"><i class="fa-solid fa-trash-can fa-2x"></i></button>
-            </div>
-        </li>
-        `;
+    for (let i = 0 ; i < taskContents.length ; i++) {
         saveTaskEntries.push(
             {
                 id:counter,
-                task:remainTasks[i]
+                task:taskContents[i].innerHTML,
+                completed:false
             }
-        );
-        counter ++;
+        )
+        counter++;
+        saveTaskToLocalStorage();
     }
-
-    saveTaskToLocalStorage();
     getTasks();
 }
+function bindDeleteAllBtn(){
+    if(saveTaskEntries.length > 0){
+        deleteAllBtn.disabled = false;
+        deleteAllBtn.addEventListener('click',function(){
+            const answer = confirm("Tüm görevleri silmek istediğinize emin misiniz ?");
+            if(answer){
+                localStorage.clear();
+                location.reload();
+            }
+        })
+    }else{
+        deleteAllBtn.disabled = true;
+    }
+}
+    
+
 
 
 
 function getTasks(){
     counter = 0;
+    inputCompletedCounter = 0;
     tasksList.innerHTML = '';
     for(i = 0 ; i < saveTaskEntries.length ; i++){
         tasksList.innerHTML += 
         `
         <li class="task" id="${counter}">
             <div class="left-side">
-                <input type="checkbox" class="completed" id="input-${counter}">
-                <span class="task-content">${saveTaskEntries[i].task}</span>
+                <input type="checkbox" ${saveTaskEntries[i].completed ? "checked = 'checked' " : ""}  class="completed ${saveTaskEntries[i].completed ? "checked" : ""}"   id="input-${counter}">
+                <span class="task-content" ${saveTaskEntries[i].completed ? "style ='text-decoration: line-through' " : ""}>${saveTaskEntries[i].task}</span>
             </div>
             <div class="right-side">
-                <button class="edit"><i class="fa-solid fa-pen-to-square fa-2x"></i></button>
+                <button class="edit" ${saveTaskEntries[i].completed ? "" : "disabled"}><i class="fa-solid fa-pen-to-square fa-2x"></i></button>
                 <button class="delete"><i class="fa-solid fa-trash-can fa-2x"></i></button>
             </div>
         </li>
         `
         counter ++;
+        if(saveTaskEntries[i].completed){
+            inputCompletedCounter++;
+        }
     }
     bindDeleteBtns();
     bindEditBtns();
     bindCompeletedInput();
     deleteCompletedElements();
-    saveTaskToLocalStorage();
+    bindDeleteAllBtn();
 }
-
 getTasks();

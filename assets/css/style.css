@@ -103,10 +103,13 @@ nav{
 }
 
 .btn-bottom{
-    margin: 20px 0px 20px 50px;
+    margin: 20px 50px 20px 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-#delete-completed{
+.btn-bottom > button{
     padding: 1rem;
     background-color: #313942;
     color: white;
@@ -118,7 +121,7 @@ nav{
     transition: background-color .3s ease-in-out;
 }
 
-#delete-completed:hover{
+.btn-bottom > button:hover{
     background-color: #8895a3;
 }
 
@@ -130,7 +133,7 @@ nav{
 
 /* Disabled */
 #add-button:disabled,
-#delete-completed:disabled{
+.btn-bottom > button:disabled{
     background-color: grey;
     cursor:default;
 }
