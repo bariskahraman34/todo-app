@@ -12,11 +12,11 @@ copyright.innerHTML = `<h3>Barış Kahraman Copyright © ${getFullYear} , Tüm H
 addBtn.disabled = true;
 deleteCompletedBtn.disabled = true;
 
-function saveTaskToLocalStorage(){
-    localStorage.setItem('taskEntries', JSON.stringify(saveTaskEntries));
-}
-
 let saveTaskEntries = JSON.parse(localStorage.getItem('taskEntries')) || [];
+
+function saveTaskToLocalStorage(){
+    return localStorage.setItem('taskEntries', JSON.stringify(saveTaskEntries));
+}
 
 newTask.addEventListener('input',function(e){
     if(e.target.value == ''){
@@ -113,8 +113,8 @@ function deleteCompletedElements(){
             // saveTaskEntries.splice((JSON.parse(localStorage.getItem('taskEntries')))[completedInput].id,1)
             completedInputsChecked.parentElement.parentElement.remove();
         }
-            getRemainTasks();
             deleteCompletedBtn.disabled = true;
+            getRemainTasks();
         })
     }else{
         deleteCompletedBtn.disabled = true;
@@ -122,7 +122,7 @@ function deleteCompletedElements(){
 }
 let remainTasks = [];
 function getRemainTasks(){
-    localStorage.clear();
+    localStorage.removeItem("taskEntries");
     const tasksContent = document.querySelectorAll('.task-content');
     
     for (const taskContent of tasksContent) {
@@ -136,7 +136,7 @@ function getRemainTasks(){
         `
         <li class="task" id="${counter}">
             <div class="left-side">
-                <input type="checkbox" class="completed">
+                <input type="checkbox" id="input-${counter}" class="completed">
                 <span class="task-content">${remainTasks[i]}</span>
             </div>
             <div class="right-side">
@@ -144,15 +144,17 @@ function getRemainTasks(){
                 <button class="delete"><i class="fa-solid fa-trash-can fa-2x"></i></button>
             </div>
         </li>
-        `
+        `;
         saveTaskEntries.push(
             {
                 id:counter,
                 task:remainTasks[i]
             }
-        )
+        );
         counter ++;
     }
+
+    saveTaskToLocalStorage();
     getTasks();
 }
 
@@ -166,7 +168,7 @@ function getTasks(){
         `
         <li class="task" id="${counter}">
             <div class="left-side">
-                <input type="checkbox" class="completed">
+                <input type="checkbox" class="completed" id="input-${counter}">
                 <span class="task-content">${saveTaskEntries[i].task}</span>
             </div>
             <div class="right-side">
