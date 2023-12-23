@@ -112,9 +112,10 @@ function deleteCompletedElements(){
             const completedInputs = document.querySelectorAll('.checked');
             for (const completedInput of completedInputs) {
                 saveTaskEntries.splice(Number(completedInput.parentElement.parentElement.id),1);
+                saveTaskToLocalStorage();
+                getTasks();
             }
-            saveTaskToLocalStorage();
-            getTasks();
+            
             deleteCompletedBtn.disabled = true;
         })
     }else{
@@ -150,7 +151,7 @@ function getTasks(){
                 <span class="task-content" ${saveTaskEntries[i].completed ? "style ='text-decoration: line-through' " : ""}>${saveTaskEntries[i].task}</span>
             </div>
             <div class="right-side">
-                <button class="edit" ${saveTaskEntries[i].completed ? "" : "disabled"}><i class="fa-solid fa-pen-to-square fa-2x"></i></button>
+                <button class="edit"><i class="fa-solid fa-pen-to-square fa-2x"></i></button>
                 <button class="delete"><i class="fa-solid fa-trash-can fa-2x"></i></button>
             </div>
         </li>
