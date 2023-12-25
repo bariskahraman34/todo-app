@@ -168,13 +168,19 @@ deleteAllBtn.addEventListener('click',function(){
 
 
 deleteCompletedBtn.addEventListener('click',function(){
-    let completedCounter = 0;
-    const completedInputs = document.querySelectorAll('.checked');
-    for (let i = 0 ; i < completedInputs.length ; i++) {
-        saveTaskEntries.splice(Number(completedInputs[i].parentElement.parentElement.id - completedCounter),1);
-        completedCounter ++;
+    // let completedCounter = 0;
+    // const completedInputs = document.querySelectorAll('.checked');
+    // for (let i = 0 ; i < completedInputs.length ; i++) {
+    //     saveTaskEntries.splice(Number(completedInputs[i].parentElement.parentElement.id - completedCounter),1);
+    //     completedCounter ++;
+    // }
+    while(document.querySelectorAll('.checked').length > 0){
+        let checkedInput = document.querySelector('.checked');
+        saveTaskEntries.splice(Number(checkedInput.parentElement.parentElement.id),1)
+        saveTaskToLocalStorage();
+        getTasks();
     }
-    saveTaskToLocalStorage();
-    getTasks();    
+
+    
 })
 
