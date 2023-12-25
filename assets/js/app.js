@@ -108,34 +108,18 @@ function bindCompeletedInput(){
 function deleteCompletedElements(){
     if(inputCompletedCounter > 0){
         deleteCompletedBtn.disabled = false;
-        deleteCompletedBtn.addEventListener('click',function(){
-            const completedInputs = document.querySelectorAll('.checked');
-            for (const completedInput of completedInputs) {
-                saveTaskEntries.splice(Number(completedInput.parentElement.parentElement.id),1);
-                saveTaskToLocalStorage();
-                getTasks();
-            }
-            
-            deleteCompletedBtn.disabled = true;
-        })
     }else{
         deleteCompletedBtn.disabled = true;
     }
 }
 
 function bindDeleteAllBtn(){
-    if(saveTaskEntries.length > 0){
+    if(saveTaskEntries.length > 0 ){
         deleteAllBtn.disabled = false;
-        deleteAllBtn.addEventListener('click',function(){
-            const answer = confirm("Tüm görevleri silmek istediğinize emin misiniz ?");
-            if(answer){
-                localStorage.clear();
-                location.reload();
-            }
-        })
     }else{
         deleteAllBtn.disabled = true;
     }
+    
 }
 
 function getTasks(){
@@ -160,11 +144,37 @@ function getTasks(){
         if(saveTaskEntries[i].completed){
             inputCompletedCounter++;
         }
+
     }
+
+    bindDeleteAllBtn();
     bindDeleteBtns();
     bindEditBtns();
-    bindCompeletedInput();
     deleteCompletedElements();
-    bindDeleteAllBtn();
+    bindCompeletedInput();
+
 }
 getTasks();
+
+deleteAllBtn.addEventListener('click',function(){
+    const answer = confirm("Tüm görevleri silmek istediğinize emin misiniz ?");
+    if(answer){
+        localStorage.clear();
+        saveTaskEntries = JSON.parse(localStorage.getItem('taskEntries')) || [];
+        getTasks();
+    }
+})
+
+
+
+deleteCompletedBtn.addEventListener('click',function(){
+    let completedCounter = 0;
+    const completedInputs = document.querySelectorAll('.checked');
+    for (let i = 0 ; i < completedInputs.length ; i++) {
+        saveTaskEntries.splice(Number(completedInputs[i].parentElement.parentElement.id - completedCounter),1);
+        completedCounter ++;
+    }
+    saveTaskToLocalStorage();
+    getTasks();    
+})
+
